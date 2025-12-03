@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Advanced Expense Tracker</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg app-navbar">
+  <div class="container-fluid">
+    <button id="sidebarToggle" class="btn btn-outline-primary d-lg-none">
+      <i class="bi bi-list"></i>
+    </button>
+
+    <span class="navbar-brand fw-bold">
+      <i class="bi bi-wallet2 me-1"></i> Expense Tracker
+    </span>
+
+    <div class="ms-auto d-flex gap-2">
+      <button id="btnExportCSV" class="btn btn-outline-secondary btn-sm"><i class="bi bi-filetype-csv"></i></button>
+      <button id="btnPrint" class="btn btn-outline-secondary btn-sm"><i class="bi bi-printer"></i></button>
+    </div>
+  </div>
+</nav>
+
+<div class="app-layout d-flex">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="p-3">
+      <h5 class="fw-bold text-light">
+        <i class="bi bi-ui-checks me-2"></i> MENU
+      </h5>
+
+      <nav class="mt-3">
+        <a href="#dashboard" class="sidebar-link active">Dashboard</a>
+        <a href="#transactions" class="sidebar-link">Transactions</a>
+        <a href="#charts" class="sidebar-link">Analytics</a>
+      </nav>
+
+      <div class="mt-4">
+        <button id="btnSampleData" class="btn btn-outline-light btn-sm w-100 mb-2">Load Sample Data</button>
+        <button id="btnClearAll" class="btn btn-outline-light btn-sm w-100">Clear All</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content flex-grow-1 p-3">
+
+    <!-- DASHBOARD -->
+    <section id="dashboard">
+      <h4 class="fw-bold">Dashboard Overview</h4>
+
+      <div class="row g-3 mt-2">
+        <div class="col-6 col-md-3"><div class="summary-card">Income <h4>₹<span id="totalIncome">0</span></h4></div></div>
+        <div class="col-6 col-md-3"><div class="summary-card">Expense <h4>₹<span id="totalExpense">0</span></h4></div></div>
+        <div class="col-6 col-md-3"><div class="summary-card">Balance <h4>₹<span id="balance">0</span></h4></div></div>
+        <div class="col-6 col-md-3"><div class="summary-card">This Month <h4>₹<span id="monthTotal">0</span></h4></div></div>
+      </div>
+    </section>
+
+    <!-- FORM + TABLE -->
+    <section id="transactions" class="mt-4">
+      <div class="row g-3">
+
+        <!-- FORM -->
+        <div class="col-lg-4">
+          <div class="card p-3 shadow-sm">
+            <h5 id="formTitleText" class="fw-semibold mb-2">Add Transaction</h5>
+
+            <form id="expenseForm">
+              <input type="hidden" id="editId">
+
+              <label class="form-label small">Title</label>
+              <input id="titleInput" class="form-control mb-2" required>
+
+              <label class="form-label small">Description</label>
+              <textarea id="descInput" class="form-control mb-2" rows="2"></textarea>
+
+              <label class="form-label small">Amount (₹)</label>
+              <input type="number" id="amountInput" class="form-control mb-2" required>
+
+              <label class="form-label small">Type</label>
+              <select id="typeInput" class="form-select mb-2">
+                <option value="expense">Expense</option>
+                <option value="income">Income</option>
+              </select>
+
+              <label class="form-label small">Category</label>
+              <select id="categoryInput" class="form-select mb-2">
+                <option>Food</option>
+                <option>Shopping</option>
+                <option>Travel</option>
+                <option>Bills</option>
+                <option>Entertainment</option>
+                <option>Salary</option>
+                <option>Freelance</option>
+                <option>Other</option>
+              </select>
+
+              <label class="form-label small">Date</label>
+              <input id="dateInput" type="date" class="form-control mb-3" required>
+
+              <button class="btn btn-primary w-100 mb-2">Save</button>
+              <button id="btnResetForm" type="button" class="btn btn-outline-secondary w-100">Reset</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- TABLE SECTION -->
+        <div class="col-lg-8">
+          <div class="card p-3 shadow-sm">
+
+            <!-- FILTERS -->
+            <div class="row g-2 mb-3">
+              <div class="col-md-4">
+                <input id="searchInput" class="form-control" placeholder="Search Title...">
+              </div>
+
+              <div class="col-md-4">
+                <select id="filterCategory" class="form-select">
+                  <option value="">All Categories</option>
+                  <option>Food</option>
+                  <option>Shopping</option>
+                  <option>Travel</option>
+                  <option>Bills</option>
+                  <option>Entertainment</option>
+                  <option>Salary</option>
+                  <option>Freelance</option>
+                  <option>Other</option>
+                </select>
+              </div>
+
+              <div class="col-md-4">
+                <select id="filterType" class="form-select">
+                  <option value="">All Types</option>
+                  <option value="income">Income</option>
+                  <option value="expense">Expense</option>
+                </select>
+              </div>
+
+              <div class="col-md-4 mt-2">
+                <select id="monthFilter" class="form-select">
+                  <option value="all">All</option>
+                  <option value="this">This Month</option>
+                  <option value="prev">Previous Month</option>
+                  <option value="3months">Last 3 Months</option>
+                  <option value="year">This Year</option>
+                </select>
+              </div>
+
+              <div class="col-md-4 mt-2">
+                <input id="filterFrom" type="date" class="form-control">
+              </div>
+
+              <div class="col-md-4 mt-2">
+                <input id="filterTo" type="date" class="form-control">
+              </div>
+            </div>
+
+            <!-- TABLE -->
+            <div class="table-responsive">
+              <table class="table table-sm text-center">
+                <thead class="table-light">
+                  <tr>
+                    <th>#</th>
+                    <th>Title / Desc</th>
+                    <th>Type</th>
+                    <th>Amount</th>
+                    <th>Category</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="expenseTableBody"></tbody>
+              </table>
+            </div>
+
+            <div id="noDataMessage" class="text-center text-muted py-2 d-none">
+              No transactions found.
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- CHARTS -->
+    <section id="charts" class="mt-4">
+      <div class="row g-3">
+
+        <div class="col-lg-4">
+          <div class="card p-3 shadow-sm">
+            <h6>Category Chart</h6>
+            <canvas id="categoryChart"></canvas>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="card p-3 shadow-sm">
+            <h6>Monthly (Jan–Dec)</h6>
+            <canvas id="monthlyChart"></canvas>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="card p-3 shadow-sm">
+            <h6>Trend Chart</h6>
+            <canvas id="trendChart"></canvas>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,125 @@
+body {
+  background: #f5f7fb;
+  font-family: system-ui;
+  overflow-x: hidden;
+}
+
+/* NAVBAR */
+.app-navbar {
+  background: white;
+  border-bottom: 1px solid #e0e0e0;
+  height: 56px;
+}
+
+/* LAYOUT */
+.app-layout {
+  display: flex;
+  overflow-x: hidden;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 240px;
+  background: linear-gradient(160deg, #0d6efd, #6d28d9);
+  color: white;
+  position: fixed;
+  top: 56px;
+  left: 0;
+  height: 100%;
+  transition: 0.3s ease;
+  z-index: 1000;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: white;
+  text-decoration: none;
+  margin-bottom: 6px;
+}
+
+.sidebar-link:hover,
+.sidebar-link.active {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.main-content {
+  margin-left: 240px;
+  width: 100%;
+}
+
+/* MOBILE SIDEBAR */
+@media (max-width: 992px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+
+  body.sidebar-open .sidebar {
+    transform: translateX(0);
+  }
+
+  .main-content {
+    margin-left: 0;
+  }
+}
+
+/* SUMMARY CARDS */
+.summary-card {
+  background: white;
+  padding: 14px;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+/* TABLE */
+.table-responsive {
+  overflow-x: auto;
+}
+
+table.table {
+  min-width: 700px;
+}
+
+/* MOBILE → CARD TABLE */
+@media (max-width: 576px) {
+  table.table thead {
+    display: none;
+  }
+
+  table.table,
+  table.table tbody,
+  table.table tr,
+  table.table td {
+    display: block;
+    width: 100%;
+  }
+
+  table.table tr {
+    margin-bottom: 12px;
+    padding: 15px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,.08);
+  }
+
+  table.table td {
+    padding: 4px 0;
+    text-align: left !important;
+    border: none;
+  }
+
+  table.table td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    color: #444;
+    display: block;
+  }
+}
+
+/* CHARTS */
+canvas {
+  width: 100% !important;
+  height: auto !important;
+}
